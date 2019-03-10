@@ -1,1 +1,1 @@
-AOP-Article-Example
+"Aspect Oriented Programming (AOP) Kısa Bakış" yazısında kullanılan örnekler
