@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@RestController("/aop")
+@RestController("/aop") // Spring Controller annotation
 public class AOPTestController {
   private static final Logger logger = LoggerFactory.getLogger(AOPTestController.class);
 
   private final ICustomerService customerService;
 
-  @Autowired
+  @Autowired //Dependency Injection
   public AOPTestController(ICustomerService customerService) {
     this.customerService = customerService;
   }
