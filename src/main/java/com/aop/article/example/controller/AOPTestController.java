@@ -1,5 +1,6 @@
 package com.aop.article.example.controller;
 
+import com.aop.article.example.aspect.component.*;
 import com.aop.article.example.dto.customer.CreateCustomerRequest;
 import com.aop.article.example.dto.customer.CreateCustomerResult;
 import com.aop.article.example.dto.customer.Customer;
@@ -24,8 +25,8 @@ public class AOPTestController {
     this.customerService = customerService;
   }
 
-  @PostMapping(path = "/create/customer")
-  public CreateCustomerResult createCustomer(@RequestBody CreateCustomerRequest createCustomerRequest) {
+  @PostMapping(path = "/create/wo/customer")
+  public CreateCustomerResult createCustomerWOAspect(@RequestBody CreateCustomerRequest createCustomerRequest) {
     final CreateCustomerResult result = new CreateCustomerResult();
     final StopWatch methodTimer = new StopWatch();
 
@@ -57,6 +58,25 @@ public class AOPTestController {
 
     //Response'yi logla
     logger.info("Method Response, [Method]: createCustomer, [Response]: {}", result);
+
+    return result;
+  }
+
+  @EventAnalytic
+  @AuthorizedRequest
+  @LogMethodData(logField = {
+      LogMethodTypeValues.REQUEST,
+      LogMethodTypeValues.RESPONSE
+  })
+  @HandleException(responseType = CreateCustomerResult.class)
+  @LogMethodPerformance
+  @PostMapping(path = "/create/w/customer")
+  public CreateCustomerResult createCustomerWAspect(@RequestBody CreateCustomerRequest createCustomerRequest){
+    final CreateCustomerResult result = new CreateCustomerResult();
+    final Customer newCustomer = customerService.create(createCustomerRequest);
+
+    result.setCompleted(true);
+    result.setData(newCustomer.getRecordId());
 
     return result;
   }
